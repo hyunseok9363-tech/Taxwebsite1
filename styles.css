@@ -9,12 +9,12 @@
 
 /* ===== CSS 변수 ===== */
 :root {
-    /* 네이비 & 화이트 테마 */
-    --navy-dark: #0a1628;
-    --navy: #152238;
-    --navy-light: #1e3a5f;
-    --accent: #2563eb;
-    --accent-light: #3b82f6;
+    /* 세무그룹 잇다 브랜드 컬러 */
+    --navy-dark: #1a1856;
+    --navy: #2b3990;
+    --navy-light: #2b388f;
+    --accent: #00adee;
+    --accent-light: #00adee;
     --white: #ffffff;
     --gray-50: #f8fafc;
     --gray-100: #f1f5f9;
@@ -29,7 +29,7 @@
     --error: #ef4444;
 
     /* 폰트 */
-    --font-main: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-main: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     /* 사이즈 */
     --header-height: 80px;
@@ -57,6 +57,7 @@ body {
     line-height: 1.7;
     color: var(--gray-700);
     background-color: var(--white);
+    overflow-x: hidden;
 }
 
 a {
@@ -191,37 +192,18 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: var(--white);
-    border-radius: var(--radius);
-}
-
-.header.scrolled .logo-icon {
-    background: var(--navy);
+    height: 36px;
 }
 
 .logo-icon svg {
-    width: 24px;
-    height: 24px;
-    color: var(--navy);
+    height: 100%;
+    width: auto;
+    filter: brightness(0) invert(1);
+    transition: filter var(--transition);
 }
 
 .header.scrolled .logo-icon svg {
-    color: var(--white);
-}
-
-.logo-text {
-    font-size: 18px;
-    color: var(--white);
-}
-
-.logo-text strong {
-    font-weight: 700;
-}
-
-.header.scrolled .logo-text {
-    color: var(--navy);
+    filter: none;
 }
 
 /* 네비게이션 */
@@ -416,7 +398,8 @@ h1, h2, h3, h4, h5, h6 {
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     align-items: center;
-    padding: 120px 0 80px;
+    padding-top: 120px;
+    padding-bottom: 80px;
 }
 
 .hero-content {
@@ -497,74 +480,18 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
 }
 
-.hero-card {
-    background: var(--white);
+.hero-team-photo {
     border-radius: var(--radius-lg);
-    padding: 40px;
+    overflow: hidden;
     box-shadow: var(--shadow-xl);
 }
 
-.hero-card-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--gray-200);
-}
-
-.hero-card-icon {
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--navy);
-    border-radius: var(--radius);
-}
-
-.hero-card-icon svg {
-    width: 28px;
-    height: 28px;
-    color: var(--white);
-}
-
-.hero-card-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--gray-800);
-}
-
-.hero-card-subtitle {
-    font-size: 14px;
-    color: var(--gray-500);
-}
-
-.hero-card-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.hero-card-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
-    background: var(--gray-50);
-    border-radius: var(--radius);
-}
-
-.hero-card-item svg {
-    width: 20px;
-    height: 20px;
-    color: var(--success);
-    flex-shrink: 0;
-}
-
-.hero-card-item span {
-    font-size: 15px;
-    color: var(--gray-700);
+.hero-team-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
 }
 
 /* ===== 섹션 헤더 ===== */
@@ -1187,17 +1114,8 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 20px;
 }
 
-.footer-brand .logo-icon {
-    background: var(--white);
-}
-
 .footer-brand .logo-icon svg {
-    color: var(--navy);
-}
-
-.footer-brand span {
-    font-size: 20px;
-    color: var(--white);
+    filter: brightness(0) invert(1);
 }
 
 .footer-desc {
@@ -1250,16 +1168,42 @@ h1, h2, h3, h4, h5, h6 {
 
 .footer-bottom {
     padding: 30px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
 .footer-info {
-    text-align: center;
+    text-align: left;
 }
 
 .footer-info p {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.4);
     line-height: 1.8;
+}
+
+.footer-legal {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-legal a {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    transition: color var(--transition);
+}
+
+.footer-legal a:hover {
+    color: var(--white);
+}
+
+.footer-legal-divider {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 12px;
 }
 
 /* ===== 모달 ===== */
@@ -1359,7 +1303,11 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .hero-visual {
-        display: none;
+        display: block;
+    }
+
+    .hero-team-photo {
+        max-height: 450px;
     }
 
     .hero-title {
@@ -1464,32 +1412,47 @@ h1, h2, h3, h4, h5, h6 {
 
     .hero {
         min-height: auto;
-        padding: 120px 0 60px;
+        padding: 100px 0 40px;
     }
 
     .hero-container {
-        padding: 0;
+        padding-top: 20px;
+        gap: 32px;
     }
 
     .hero-title {
-        font-size: 32px;
+        font-size: 30px;
     }
 
     .hero-desc {
-        font-size: 16px;
+        font-size: 15px;
+        margin-bottom: 28px;
     }
 
     .hero-buttons {
-        flex-direction: column;
+        flex-direction: row;
+    }
+
+    .hero-buttons .btn {
+        flex: 1;
+        text-align: center;
+        padding: 14px 16px;
+        font-size: 15px;
     }
 
     .hero-stats {
         grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
     }
 
     .hero-stat-number {
-        font-size: 28px;
+        font-size: 26px;
+    }
+
+    .hero-stat-label {
+        font-size: 12px;
     }
 
     .page-hero {
@@ -1526,24 +1489,37 @@ h1, h2, h3, h4, h5, h6 {
         grid-template-columns: 1fr 1fr;
         gap: 32px;
     }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-info {
+        text-align: center;
+    }
 }
 
 @media (max-width: 480px) {
     .hero-title {
-        font-size: 28px;
+        font-size: 26px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
     }
 
     .hero-stats {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        text-align: left;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
     }
 
-    .hero-stat {
-        display: flex;
-        align-items: baseline;
-        gap: 12px;
-        text-align: left;
+    .hero-stat-number {
+        font-size: 22px;
+    }
+
+    .hero-stat-label {
+        font-size: 11px;
     }
 
     .btn {

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>관리자 | 세무그룹 잇다</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <style>
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .admin-header p {
+            color: var(--gray-500);
+            font-size: 14px;
+        }
+
+        .admin-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .admin-notice-item {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 24px 32px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .admin-notice-item:hover {
+            border-color: var(--navy);
+            box-shadow: var(--shadow);
+        }
+
+        .admin-notice-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .admin-notice-actions .btn {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-danger {
+            color: var(--error);
+            border-color: var(--error);
+        }
+
+        .btn-danger:hover {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .admin-notice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        #loginError {
+            color: var(--error);
+            font-size: 14px;
+            display: none;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-notice-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+                gap: 12px;
+            }
+
+            .admin-notice-actions .btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 플레이스홀더 -->
+    <div id="header-placeholder"></div>
+
+    <!-- 페이지 히어로 -->
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-hero-content">
+                <h1>관리자</h1>
+                <p>공지사항 관리 페이지</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+
+            <!-- 로그인 영역 -->
+            <div id="loginSection">
+                <div class="contact-form-card" style="max-width: 400px; margin: 0 auto;">
+                    <h3 style="margin-bottom: 24px; font-size: 20px;">관리자 로그인</h3>
+                    <form id="loginForm" class="contact-form">
+                        <div class="form-group">
+                            <label>이메일</label>
+                            <input type="email" id="loginEmail" required placeholder="admin@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>비밀번호</label>
+                            <input type="password" id="loginPassword" required placeholder="비밀번호 입력">
+                        </div>
+                        <div id="loginError">로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.</div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">로그인</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 관리 영역 -->
+            <div id="adminSection" style="display: none;">
+
+                <!-- 상단 버튼 -->
+                <div class="admin-header">
+                    <p>관리자: <span id="adminEmail"></span></p>
+                    <div class="admin-buttons">
+                        <button class="btn btn-primary" onclick="showNoticeForm()">+ 새 공지 작성</button>
+                        <button class="btn btn-outline" onclick="handleLogout()">로그아웃</button>
+                    </div>
+                </div>
+
+                <!-- 공지 작성/수정 폼 -->
+                <div id="noticeFormSection" style="display: none; margin-bottom: 32px;">
+                    <div class="contact-form-card">
+                        <h3 id="formTitle" style="margin-bottom: 24px; font-size: 20px;">새 공지 작성</h3>
+                        <form id="noticeForm" class="contact-form">
+                            <input type="hidden" id="noticeId">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>카테고리 <span class="required">*</span></label>
+                                    <select id="noticeCategory" required>
+                                        <option value="공지">공지</option>
+                                        <option value="이벤트">이벤트</option>
+                                        <option value="업데이트">업데이트</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>날짜 <span class="required">*</span></label>
+                                    <input type="text" id="noticeDate" required placeholder="2025.01.02">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>제목 <span class="required">*</span></label>
+                                <input type="text" id="noticeTitle" required placeholder="공지 제목을 입력하세요">
+                            </div>
+                            <div class="form-group">
+                                <label>요약 내용 <span class="required">*</span></label>
+                                <textarea id="noticeExcerpt" required placeholder="공지 내용을 간략히 입력하세요"></textarea>
+                            </div>
+                            <div style="display: flex; gap: 12px;">
+                                <button type="submit" class="btn btn-primary">저장</button>
+                                <button type="button" class="btn btn-outline" onclick="hideNoticeForm()">취소</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 공지 목록 (관리용) -->
+                <div class="admin-notice-list" id="adminNoticeList">
+                    <div class="notice-empty">불러오는 중...</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 삭제 확인 모달 -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-icon" style="background: rgba(239, 68, 68, 0.1);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--error);">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <h3>삭제 확인</h3>
+            <p>이 공지사항을 삭제하시겠습니까?<br>삭제 후 복구할 수 없습니다.</p>
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 24px;">
+                <button class="btn btn-primary" id="confirmDelete" style="background: var(--error); border-color: var(--error);">삭제</button>
+                <button class="btn btn-outline" onclick="hideDeleteModal()">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 플레이스홀더 -->
+    <div id="footer-placeholder"></div>
+
+    <script src="common.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        // ===== 인증 상태 관리 =====
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminSection').style.display = 'block';
+                document.getElementById('adminEmail').textContent = user.email;
+                loadAdminNotices();
+            } else {
+                document.getElementById('loginSection').style.display = 'block';
+                document.getElementById('adminSection').style.display = 'none';
+            }
+        });
+
+        // ===== 로그인 =====
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                errorDiv.style.display = 'none';
+            } catch (error) {
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        // ===== 로그아웃 =====
+        function handleLogout() {
+            auth.signOut();
+        }
+
+        // ===== HTML 이스케이프 =====
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ===== 카테고리 CSS 클래스 =====
+        function getCategoryClass(category) {
+            const map = { '이벤트': 'event', '업데이트': 'update' };
+            return map[category] || '';
+        }
+
+        // ===== 관리자 공지 목록 =====
+        async function loadAdminNotices() {
+            try {
+                const snapshot = await db.collection('notices').orderBy('createdAt', 'desc').get();
+                const list = document.getElementById('adminNoticeList');
+
+                if (snapshot.empty) {
+                    list.innerHTML = '<div class="notice-empty">등록된 공지사항이 없습니다.</div>';
+                    return;
+                }
+
+                list.innerHTML = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    const categoryClass = getCategoryClass(data.category);
+                    return `
+                        <div class="admin-notice-item">
+                            <span class="notice-category ${categoryClass}">${escapeHtml(data.category)}</span>
+                            <div class="notice-content" style="flex: 1;">
+                                <h3 class="notice-title">${escapeHtml(data.title)}</h3>
+                                <p class="notice-excerpt">${escapeHtml(data.excerpt)}</p>
+                            </div>
+                            <span class="notice-date">${escapeHtml(data.date)}</span>
+                            <div class="admin-notice-actions">
+                                <button class="btn btn-outline" onclick="editNotice('${doc.id}')">수정</button>
+                                <button class="btn btn-outline btn-danger" onclick="confirmDeleteNotice('${doc.id}')">삭제</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('공지사항 로드 실패:', error);
+                document.getElementById('adminNoticeList').innerHTML =
+                    '<div class="notice-empty">공지사항을 불러오는데 실패했습니다.</div>';
+            }
+        }
+
+        // ===== 폼 표시/숨기기 =====
+        function showNoticeForm(editData) {
+            const formSection = document.getElementById('noticeFormSection');
+            formSection.style.display = 'block';
+
+            if (editData) {
+                document.getElementById('formTitle').textContent = '공지 수정';
+                document.getElementById('noticeId').value = editData.id;
+                document.getElementById('noticeCategory').value = editData.category;
+                document.getElementById('noticeDate').value = editData.date;
+                document.getElementById('noticeTitle').value = editData.title;
+                document.getElementById('noticeExcerpt').value = editData.excerpt;
+            } else {
+                document.getElementById('formTitle').textContent = '새 공지 작성';
+                document.getElementById('noticeForm').reset();
+                document.getElementById('noticeId').value = '';
+                // 오늘 날짜 기본값
+                const today = new Date();
+                const dateStr = today.getFullYear() + '.' +
+                    String(today.getMonth() + 1).padStart(2, '0') + '.' +
+                    String(today.getDate()).padStart(2, '0');
+                document.getElementById('noticeDate').value = dateStr;
+            }
+
+            formSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hideNoticeForm() {
+            document.getElementById('noticeFormSection').style.display = 'none';
+            document.getElementById('noticeForm').reset();
+            document.getElementById('noticeId').value = '';
+        }
+
+        // ===== 저장 (생성/수정) =====
+        document.getElementById('noticeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('noticeId').value;
+            const noticeData = {
+                category: document.getElementById('noticeCategory').value,
+                date: document.getElementById('noticeDate').value,
+                title: document.getElementById('noticeTitle').value,
+                excerpt: document.getElementById('noticeExcerpt').value,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                if (id) {
+                    await db.collection('notices').doc(id).update(noticeData);
+                } else {
+                    noticeData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    await db.collection('notices').add(noticeData);
+                }
+                hideNoticeForm();
+                loadAdminNotices();
+            } catch (error) {
+                alert('저장에 실패했습니다: ' + error.message);
+            }
+        });
+
+        // ===== 수정 =====
+        async function editNotice(id) {
+            try {
+                const doc = await db.collection('notices').doc(id).get();
+                if (doc.exists) {
+                    showNoticeForm({ id, ...doc.data() });
+                }
+            } catch (error) {
+                alert('데이터를 불러오는데 실패했습니다.');
+            }
+        }
+
+        // ===== 삭제 =====
+        let deleteTargetId = null;
+
+        function confirmDeleteNotice(id) {
+            deleteTargetId = id;
+            document.getElementById('deleteModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            document.body.style.overflow = '';
+            deleteTargetId = null;
+        }
+
+        document.getElementById('confirmDelete').addEventListener('click', async () => {
+            if (deleteTargetId) {
+                try {
+                    await db.collection('notices').doc(deleteTargetId).delete();
+                    hideDeleteModal();
+                    loadAdminNotices();
+                } catch (error) {
+                    alert('삭제에 실패했습니다: ' + error.message);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

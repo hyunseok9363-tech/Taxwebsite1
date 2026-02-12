@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="세무법인 신뢰의 공지사항 - 세무 관련 소식과 공지를 확인하세요.">
-    <title>공지사항 | 세무법인 신뢰</title>
+    <meta name="description" content="세무그룹 잇다의 공지사항 - 세무 관련 소식과 공지를 확인하세요.">
+    <title>공지사항 | 세무그룹 잇다</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <!-- 헤더 플레이스홀더 -->
@@ -18,7 +22,7 @@
         <div class="container">
             <div class="page-hero-content">
                 <h1>공지사항</h1>
-                <p>세무법인 신뢰의 소식과 세무 관련 정보를 안내합니다</p>
+                <p>세무그룹 잇다의 소식과 세무 관련 정보를 안내합니다</p>
                 <div class="breadcrumb">
                     <a href="index.html">홈</a>
                     <span>/</span>
@@ -31,89 +35,12 @@
     <!-- 공지사항 목록 -->
     <section class="section">
         <div class="container">
-            <div class="notice-list">
-                <a href="#" class="notice-item fade-in">
-                    <span class="notice-category">공지</span>
-                    <div class="notice-content">
-                        <h3 class="notice-title">2025년 종합소득세 신고 안내</h3>
-                        <p class="notice-excerpt">2025년 종합소득세 신고 기간 및 주요 변경사항을 안내해 드립니다.</p>
-                    </div>
-                    <span class="notice-date">2025.01.02</span>
-                </a>
-                <a href="#" class="notice-item fade-in">
-                    <span class="notice-category event">이벤트</span>
-                    <div class="notice-content">
-                        <h3 class="notice-title">신규 고객 첫 달 기장료 50% 할인 이벤트</h3>
-                        <p class="notice-excerpt">2025년 새해를 맞아 신규 고객분들께 특별 할인 혜택을 드립니다.</p>
-                    </div>
-                    <span class="notice-date">2024.12.20</span>
-                </a>
-                <a href="#" class="notice-item fade-in">
-                    <span class="notice-category">공지</span>
-                    <div class="notice-content">
-                        <h3 class="notice-title">연말정산 자료 제출 안내</h3>
-                        <p class="notice-excerpt">2024년 귀속 연말정산 관련 자료 제출 일정 및 방법을 안내합니다.</p>
-                    </div>
-                    <span class="notice-date">2024.12.15</span>
-                </a>
-                <a href="#" class="notice-item fade-in">
-                    <span class="notice-category update">업데이트</span>
-                    <div class="notice-content">
-                        <h3 class="notice-title">2025년 세법 개정 주요 내용 정리</h3>
-                        <p class="notice-excerpt">2025년부터 적용되는 세법 개정 내용 중 사업자분들이 알아야 할 핵심 사항을 정리했습니다.</p>
-                    </div>
-                    <span class="notice-date">2024.12.10</span>
-                </a>
-                <a href="#" class="notice-item fade-in">
-                    <span class="notice-category">공지</span>
-                    <div class="notice-content">
-                        <h3 class="notice-title">2024년 2기 부가가치세 신고 안내</h3>
-                        <p class="notice-excerpt">2024년 2기 부가가치세 확정신고 기간 및 제출 서류를 안내합니다.</p>
-                    </div>
-                    <span class="notice-date">2024.12.01</span>
-                </a>
-                <a href="#" class="notice-item fade-in">
-                    <span class="notice-category">공지</span>
-                    <div class="notice-content">
-                        <h3 class="notice-title">추석 연휴 휴무 안내</h3>
-                        <p class="notice-excerpt">추석 연휴 기간(9/16~9/18) 동안 휴무임을 알려드립니다.</p>
-                    </div>
-                    <span class="notice-date">2024.09.10</span>
-                </a>
-                <a href="#" class="notice-item fade-in">
-                    <span class="notice-category update">업데이트</span>
-                    <div class="notice-content">
-                        <h3 class="notice-title">전자세금계산서 발행 시스템 업그레이드</h3>
-                        <p class="notice-excerpt">더 빠르고 편리한 전자세금계산서 발행을 위해 시스템이 업그레이드되었습니다.</p>
-                    </div>
-                    <span class="notice-date">2024.08.20</span>
-                </a>
-                <a href="#" class="notice-item fade-in">
-                    <span class="notice-category">공지</span>
-                    <div class="notice-content">
-                        <h3 class="notice-title">2024년 1기 부가가치세 신고 완료 안내</h3>
-                        <p class="notice-excerpt">2024년 1기 부가가치세 신고가 정상적으로 완료되었습니다.</p>
-                    </div>
-                    <span class="notice-date">2024.07.25</span>
-                </a>
+            <div class="notice-list" id="noticeList">
+                <div class="notice-empty" id="noticeLoading">공지사항을 불러오는 중...</div>
             </div>
 
             <!-- 페이지네이션 -->
-            <div class="pagination">
-                <a href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                        <path d="M15 19l-7-7 7-7"/>
-                    </svg>
-                </a>
-                <span class="active">1</span>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                        <path d="M9 5l7 7-7 7"/>
-                    </svg>
-                </a>
-            </div>
+            <div class="pagination" id="pagination"></div>
         </div>
     </section>
 
@@ -121,5 +48,124 @@
     <div id="footer-placeholder"></div>
 
     <script src="common.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        // 페이지 설정
+        const NOTICES_PER_PAGE = 8;
+        let currentPage = 1;
+        let allNotices = [];
+
+        // 카테고리 → CSS 클래스 매핑
+        function getCategoryClass(category) {
+            const map = { '이벤트': 'event', '업데이트': 'update' };
+            return map[category] || '';
+        }
+
+        // HTML 이스케이프 (XSS 방지)
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 공지사항 HTML 생성
+        function renderNoticeItem(notice) {
+            const categoryClass = getCategoryClass(notice.category);
+            return `
+                <div class="notice-item fade-in visible">
+                    <span class="notice-category ${categoryClass}">${escapeHtml(notice.category)}</span>
+                    <div class="notice-content">
+                        <h3 class="notice-title">${escapeHtml(notice.title)}</h3>
+                        <p class="notice-excerpt">${escapeHtml(notice.excerpt)}</p>
+                    </div>
+                    <span class="notice-date">${escapeHtml(notice.date)}</span>
+                </div>
+            `;
+        }
+
+        // 목록 렌더링
+        function renderNotices(page) {
+            const list = document.getElementById('noticeList');
+            const start = (page - 1) * NOTICES_PER_PAGE;
+            const end = start + NOTICES_PER_PAGE;
+            const pageNotices = allNotices.slice(start, end);
+
+            if (pageNotices.length === 0) {
+                list.innerHTML = '<div class="notice-empty">등록된 공지사항이 없습니다.</div>';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            list.innerHTML = pageNotices.map(renderNoticeItem).join('');
+            renderPagination(page);
+        }
+
+        // 페이지네이션 렌더링
+        function renderPagination(page) {
+            const totalPages = Math.ceil(allNotices.length / NOTICES_PER_PAGE);
+            const paginationEl = document.getElementById('pagination');
+
+            if (totalPages <= 1) {
+                paginationEl.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+
+            // 이전 버튼
+            html += `<a href="#" onclick="goToPage(${page - 1}); return false;"
+                        ${page === 1 ? 'style="opacity:0.3;pointer-events:none"' : ''}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M15 19l-7-7 7-7"/>
+                        </svg></a>`;
+
+            // 페이지 번호
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === page) {
+                    html += `<span class="active">${i}</span>`;
+                } else {
+                    html += `<a href="#" onclick="goToPage(${i}); return false;">${i}</a>`;
+                }
+            }
+
+            // 다음 버튼
+            html += `<a href="#" onclick="goToPage(${page + 1}); return false;"
+                        ${page === totalPages ? 'style="opacity:0.3;pointer-events:none"' : ''}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M9 5l7 7-7 7"/>
+                        </svg></a>`;
+
+            paginationEl.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderNotices(page);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Firestore에서 공지사항 불러오기
+        async function loadNotices() {
+            try {
+                const snapshot = await db.collection('notices')
+                    .orderBy('createdAt', 'desc')
+                    .get();
+
+                allNotices = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                renderNotices(1);
+            } catch (error) {
+                console.error('공지사항 로드 실패:', error);
+                document.getElementById('noticeList').innerHTML =
+                    '<div class="notice-empty">공지사항을 불러오는데 실패했습니다.</div>';
+            }
+        }
+
+        // 페이지 로드 시 실행
+        document.addEventListener('DOMContentLoaded', loadNotices);
+    </script>
 </body>
 </html>
